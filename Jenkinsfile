@@ -4,7 +4,7 @@ pipeline {
     parameters {
         string(
             name: 'TAR_PATH',
-            description: 'Path to the image archive',
+            description: 'Path to the image archive relative to workspace',
             defaultValue: 'vuln-image.tar'
         )
         choice(name: 'REPORT_FORMAT', choices: ['JSON', 'HTML', 'SARIF'], description: 'Report format')
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 sh """
                 docker build -t debug .
-                docker save -o ${params.TAR_PATH} debug
+                docker save -o ${WORKSPACE}/${params.TAR_PATH} debug
                 tree .
                 """
             }
@@ -41,7 +41,7 @@ pipeline {
                 script {
                     scan = load "scan.groovy"
                     scan.bitdetectorScanImage(
-                        params.TAR_PATH,
+                        "${WORKSPACE}/${params.TAR_PATH}",
                         params.REPORT_FORMAT,
                         "report.${params.REPORT_FORMAT.toLowerCase()}",
                         "${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}",
