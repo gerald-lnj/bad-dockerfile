@@ -1,4 +1,3 @@
-scan = ''
 pipeline {
     agent any
     parameters {
