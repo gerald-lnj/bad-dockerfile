@@ -1,10 +1,10 @@
 #!/usr/bin/env groovy
 
 def bitdetectorScanImage(
-    imagePath,
-    reportFormat,
-    reportFilename = '',
-    reportName = ''
+    String imageAbsPath,
+    String reportFormat,
+    String reportFilename = '',
+    String reportName = ''
 ) {
     assert reportFormat in ['JSON', 'HTML', 'SARIF']
     if (reportFilename == '') {
@@ -17,7 +17,7 @@ def bitdetectorScanImage(
         gh release -R horangi-ir/bitdetector download -p bitdetector_Linux_x86_64.tar.gz
         tar -xzf bitdetector_Linux_x86_64.tar.gz
         tar -xzf dependencies/ctc.tar.gz -C .
-        ./bitdetector filesystem \"${imagePath}\" -f ${reportFormat} -p \"${reportFilename}\" -n \"${reportName}\"
+        ./bitdetector filesystem \"${imageAbsPath}\" -f ${reportFormat} -p \"${reportFilename}\" -n \"${reportName}\"
         cat ${reportFilename}
         """
     }
